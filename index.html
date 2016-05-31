@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh">
+    <meta charset="UTF-8">
+    <title>分页算法</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+</head>
+<body>
+    <div id="page"></div>
+    <script type="text/javascript">
+    var totalPage = 100, page = 22, near = 2;
+
+    function getHidePage(page, totalPage, near) {
+        var hideArr = [];
+        for(var i = 1; i <= totalPage; i++) {
+            if((i > 1 + near && i < page - near) || (i > page + near && i < totalPage - near)) {
+                hideArr.push(i);
+            }
+        }
+        return hideArr;
+    }
+
+    var hidePage = getHidePage(page, totalPage, near);
+
+    var pageHtml = '';
+    for(var i = 1; i <= totalPage; i++) {
+        var isSame = 0;
+        for(var j = 0; j < hidePage.length; j++) {
+            if(i == hidePage[j]) {
+                isSame = 1;
+                break;
+            }
+        }
+        if(isSame) {
+            continue;
+        }
+        pageHtml += i + '&emsp;';
+    }
+    document.getElementById('page').innerHTML = pageHtml;
+    </script>
+</body>
+</html>
