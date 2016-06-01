@@ -8,35 +8,34 @@
 <body>
     <div id="page"></div>
     <script type="text/javascript">
-    var totalPage = 100, page = 22, near = 2;
+    var totalPage = 100, page = 23, near = 2;
 
-    function getHidePage(page, totalPage, near) {
-        var hideArr = [];
+    function getShowPage(page, totalPage, near) {
+        var showArr = [], hideArr = [];
         for(var i = 1; i <= totalPage; i++) {
-            if((i > 1 + near && i < page - near) || (i > page + near && i < totalPage - near)) {
-                hideArr.push(i);
+            if(i <= 1 + near || i >= page - near && i <= page + near || i >= totalPage - near) {
+                showArr.push(i);
+            }else if(i > 1 + near && i < page - near && !hideArr[0]) {
+                hideArr[0] = i;
+            }else if(i > page + near && i < totalPage - near && !hideArr[1]) {
+                hideArr[1] = i;
             }
         }
-        return hideArr;
+        return [showArr, hideArr];
     }
 
-    var hidePage = getHidePage(page, totalPage, near);
-
+    var start = new Date().getTime();
+    var showPage = getShowPage(page, totalPage, near);
     var pageHtml = '';
-    for(var i = 1; i <= totalPage; i++) {
-        var isSame = 0;
-        for(var j = 0; j < hidePage.length; j++) {
-            if(i == hidePage[j]) {
-                isSame = 1;
-                break;
-            }
-        }
-        if(isSame) {
-            continue;
-        }
-        pageHtml += i + '&emsp;';
+
+    for(var i = 0; i < showPage[0].length; i++) {
+        var item = showPage[0][i];
+        pageHtml += item + '&emsp;' + (item + 1 == showPage[1][0] || item + 1 == showPage[1][1] ? '...&emsp;' : '');
     }
+
+    console.log(new Date().getTime() - start);
     document.getElementById('page').innerHTML = pageHtml;
+    console.log(new Date().getTime() - start);
     </script>
 </body>
 </html>
